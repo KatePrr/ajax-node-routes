@@ -1,17 +1,19 @@
 $(document).ready(function() {
-    $('#post-data').on('click', clickPostData);
-    $('#get-data').on('click', clickGetData);
+    $('#post-name-data').on('click', clickPostData);
+    $('#get-name-data').on('click', clickGetData);
 
+    $('#post-animal-data').on('click', clickPostData);
+    $('#get-animal-data').on('click', clickGetData);
 });
 
-function clickPostData() {
+function clickPostNameData() {
     event.preventDefault();
     var values = {};
-    $.each($('#post-form').serializeArray(), function(i, field) {
+    $.each($('#post-name-form').serializeArray(), function(i, field) {
         values[field.name] = field.value;
     });
 
-    $('#post-form').find('input[type=text]').val('');
+    $('#post-name-form').find('input[type=text]').val('');
 
     $.ajax({
         type: 'POST',
@@ -29,13 +31,51 @@ function clickPostData() {
 
 }
 
-function clickGetData() {
+function clickGetNameData() {
     event.preventDefault();
     $.ajax({
         type: 'GET',
         url: '/data',
         success: function(data) {
+
+
             console.log(data);
         }
     });
+
+    function clickPostAnimalData() {
+        event.preventDefault();
+        var values = {};
+        $.each($('#post-animal-form').serializeArray(), function(i, field) {
+            values[field.name] = field.value;
+        });
+
+        $('#post-animal-form').find('input[type=text]').val('');
+
+        $.ajax({
+            type: 'POST',
+            url: '/data',
+            data: values,
+            beforeSend: function() {
+                console.log('before!');
+            },
+            success: function(data) {
+                console.log('From Server: ', data);
+                console.log(data);
+            }
+        });
+
+
+    }
+
+    function clickGetAnimalData() {
+        event.preventDefault();
+        $.ajax({
+            type: 'GET',
+            url: '/data',
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    }
 }
