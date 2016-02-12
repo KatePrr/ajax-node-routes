@@ -4,21 +4,29 @@ var path = require('path');
 var animalArray = [];
 
 function randomIndex(array){
-    var index = randomNumber(0, array.length);
+    var index = randomNumber(0, array.length - 1);
     return array[index];
 }
 function randomNumber(min, max){
-    return Mathfloor(Math.random() * (1 + max - min) + min);
+    return Math.floor(Math.random() * (1 + max - min) + min);
 }
 
 
 router.get('/', function(req, res) {
-    res.send({message: 'hello'});
+    //res.send({message: 'hello'});
+    res.send(animalArray);
+});
+
+
+router.get('/random', function(req, res) {
+    //res.send({message: 'hello'});
+    res.send(randomIndex(animalArray));
 });
 
 router.post('/', function(req, res) {
-    console.log(req.body);
-    res.send(req.body);
+    animalArray.push(req.body.spiritAnimal)
+    console.log(animalArray);
+    res.send(animalArray);
 });
 
 
