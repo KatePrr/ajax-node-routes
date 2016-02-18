@@ -2,10 +2,9 @@ $(document).ready(function() {
 
     loadData();
 
-    $('#post-animal-data').on('click', clickPostAnimalData);
+    $('#name-container').on('click', '.post-animal-data', clickPostAnimalData);
     $('#post-name-data').on('click', clickPostNameData);
-    $('#get-random-data').on('click', getRandomData);
-
+    //$('#get-random-data').on('click', getRandomData);
     //$('#get-name-data').on('click', clickGetNameData);
     //$('#get-animal-data').on('click', clickGetAnimalData);
 });
@@ -23,29 +22,14 @@ function clickPostNameData() {
         type: 'POST',
         url: '/name',
         data: values,
-        beforeSend: function() {
-            console.log('before!');
-        },
         success: function(data) {
             console.log('From Server: ', data);
             console.log(data);
-            arrayToDom(data, '#name-container');
+            personToDOM(data, '#name-container');
         }
     });
 }
 
-function clickGetNameData() {
-    event.preventDefault();
-    $.ajax({
-        type: 'GET',
-        url: '/name/random',
-        success: function (data) {
-
-
-            console.log(data);
-        }
-    });
-}
 
 function clickPostAnimalData() {
         event.preventDefault();
@@ -54,44 +38,33 @@ function clickPostAnimalData() {
             values[field.name] = field.value;
         });
 
-        $('#post-animal-form').find('input[type=text]').val('');
+        values.id = $(this).data('id');
 
         $.ajax({
             type: 'POST',
             url: '/animals',
             data: values,
-            beforeSend: function() {
-                console.log('before!');
-            },
             success: function(data) {
                 console.log('From Server: ', data);
                 console.log(data);
-                arrayToDom(data, '#animal-container');
             }
         });
+    $(this).parent().parent().remove();
     }
 
-function clickGetAnimalData() {
-    event.preventDefault();
-    $.ajax({
-        type: 'GET',
-        url: '/animals/random',
-        success: function(data) {
-            //console.log(data);
-        }
-    });
-}
+function personToDOM(person, id) {
+    output = '<div>';
+        output += '<p>' + person.first_name + ' ' +  person.last_name + '</p>';
+        output += '<form id="post-animal-form"><label for="' + person.first_name + '-animal">' + person.first_name + '\'s Spirit Animal: </label>';
+        output += '<input type="text" id="' + person.first_name + '" name="animal_name" />';
 
+        output += '<label for="' + person.first_name + '-color">Spirit Animal Color: </label>';
+        output += '<input type="text" id="' + person.first_name + '" name="animal_color" />';
+        output += '<button class="post-animal-data" data-id="' + person.id + '">Submit</button></form>';
 
-function arrayToDom(array, id) {
-    $(id).children().remove();
-    output = '<ul>';
-    for (var i = 0; i < array.length; i++){
-        output += '<li>' + array[i] + '</li>';
-    }
-    output += '</ul>';
+        output += '</div>';
     $(id).append(output);
-};
+}
 
 
 function loadData() {
@@ -99,7 +72,6 @@ function loadData() {
         type: 'GET',
         url: '/name',
         success: function (data) {
-            arrayToDom(data, '#name-container');
             //console.log(data);
         }
     });
@@ -108,28 +80,58 @@ function loadData() {
         type: 'GET',
         url: '/animals',
         success: function (data) {
-            arrayToDom(data, '#animal-container');
+          //  arrayToDom(data, '#animal-container');
             //console.log(data);
         }
     });
-};
+}
 
-function getRandomData(){
-    $('#random-data-container').children().remove();
-    $.ajax({
-        type: 'GET',
-        url: '/animals/random',
-        success: function (data) {
-           $('#random-data-container').append('<p class="random-pair">' + data + '</p>');
-        }
-    })
-    $.ajax({
-        type: 'GET',
-        url: '/name/random',
-        success: function (data) {
-            $('#random-data-container').append('<p class="random-pair">' + data + '</p>');
 
-            //console.log(data);
-        }
-    })
-};
+//function clickGetNameData() {
+//    event.preventDefault();
+//    $.ajax({
+//        type: 'GET',
+//        url: '/name/random',
+//        success: function (data) {
+//
+//
+//            console.log(data);
+//        }
+//    });
+//}
+
+
+
+//
+//function clickGetAnimalData() {
+//    event.preventDefault();
+//    $.ajax({
+//        type: 'GET',
+//        url: '/animals/random',
+//        success: function(data) {
+//            //console.log(data);
+//        }
+//    });
+//}
+
+
+
+//function getRandomData(){
+//    $('#random-data-container').children().remove();
+//    $.ajax({
+//        type: 'GET',
+//        url: '/animals/random',
+//        success: function (data) {
+//           $('#random-data-container').append('<p class="random-pair">' + data + '</p>');
+//        }
+//    })
+//    $.ajax({
+//        type: 'GET',
+//        url: '/name/random',
+//        success: function (data) {
+//            $('#random-data-container').append('<p class="random-pair">' + data + '</p>');
+//
+//            //console.log(data);
+//        }
+//    })
+//};

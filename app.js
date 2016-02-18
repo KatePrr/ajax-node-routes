@@ -2,10 +2,12 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var path = require('path');
-//var data = require('./routes/data');
 var name = require('./routes/name');
 var animals = require('./routes/animals');
+var pg = require('pg');
+//var connectionString = require('/connectionString');
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('port', process.env.PORT || 5000);
 
@@ -23,3 +25,4 @@ app.get('/*', function(req, res) {
 app.listen(app.get('port'), function() {
     console.log('Server is ready on port ' + app.get('port'));
 });
+
